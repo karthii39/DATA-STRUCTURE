@@ -1,0 +1,322 @@
+xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:onClick="onclick"
+    android:orientation="vertical"
+    android:textAlignment="center"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:text="REGISTRATION FORM"
+            android:textAlignment="center" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="27dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:text="Name:" />
+
+        <EditText
+            android:id="@+id/editTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="58dp"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="enter name"
+            android:inputType="text" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="29dp"
+            android:layout_height="31dp"
+            android:layout_weight="1"
+            android:text="Email:" />
+
+        <EditText
+            android:id="@+id/editTxt2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="enter mail"
+            android:inputType="text" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="23dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:text="Password:" />
+
+        <EditText
+            android:id="@+id/editTxt3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="enter password"
+            android:inputType="textPassword" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="117dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="Gender:" />
+
+        <RadioGroup
+            android:id="@+id/rg"
+            android:layout_width="314dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rbutton"
+                android:layout_width="148dp"
+                android:layout_height="wrap_content"
+                android:text="male" />
+
+            <RadioButton
+                android:id="@+id/rbutton2"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="female" />
+        </RadioGroup>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <CheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Agree" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="116dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal"></LinearLayout>
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onclick"
+            android:text="Submit"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+</LinearLayout>
+
+.java
+package com.example.sharedpreferences;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+    EditText name;
+    EditText mail;
+    EditText pass;
+    RadioGroup rgr;
+    RadioButton r;
+    CheckBox check;
+    Button s;
+    Boolean isAllFieldsChecked;
+    SharedPreferences sp;
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        name=findViewById(R.id.editTxt);
+        mail=findViewById(R.id.editTxt2);
+        pass=findViewById(R.id.editTxt3);
+        rgr=findViewById(R.id.rg);
+        r=findViewById(R.id.rbutton);
+        check=findViewById(R.id.checkbox);
+        s=findViewById(R.id.submit);
+        sp=getSharedPreferences("login",MODE_PRIVATE);
+
+    }
+
+    public void onclick(View view) {
+        isAllFieldsChecked=checkAllFields();
+        if(isAllFieldsChecked){
+            SharedPreferences.Editor ed=sp.edit();
+            ed.putString("name",name.getText().toString());
+            ed.putString("email",mail.getText().toString());
+            ed.putString("gender",rgr.getCheckedRadioButtonId()==R.id.rg?"male":"female");
+            ed.commit();
+            Toast.makeText(this, "successfully", Toast.LENGTH_SHORT).show();
+            Intent i=new Intent(MainActivity.this,MainActivity2.class);
+            startActivity(i);
+        }
+    }
+    private boolean checkAllFields(){
+        if(name.length()==0){
+            name.setError("name is required");
+            return false;
+        }
+        if(mail.length()==0){
+            mail.setError("mail is required");
+            return false;
+        }else {
+            String Email=mail.getText().toString();
+            String checkEmail="[a-zA-Z0-9._-]+@+[a-z]+.+[a-z]+";
+            if(!Email.matches(checkEmail)){
+                mail.setError("invalid error");
+                return false;
+            }
+        }
+        if(pass.length()<8) {
+            pass.setError("password is required");
+            return false;
+        }
+        if(rgr.getCheckedRadioButtonId()==-1){
+            r.setError("select gender");
+            r.requestFocus();
+            return false;
+        }
+        if(!check.isChecked()){
+            check.setError("please agree");
+            check.requestFocus();
+            return false;
+        }
+        return true;
+    }
+
+}
+xml2
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity2">
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:text="REGISTRATION FORM"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:text="Name:" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="match_parent"
+        android:layout_height="53dp"
+        android:text="Email:" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="43dp"
+        android:text="Gender:" />
+</LinearLayout>
+java2
+package com.example.sharedpreferences;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity2 extends AppCompatActivity {
+    TextView displayname,displaymail,displaygender;
+    SharedPreferences sp;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+        Toast.makeText(this, "login successfully completed", Toast.LENGTH_SHORT).show();
+        sp=getSharedPreferences("login",MODE_PRIVATE);
+        displayname=findViewById(R.id.textView6);
+        displaymail=findViewById(R.id.textView7);
+        displaygender=findViewById(R.id.textView8);
+        String name=sp.getString("name","afsana");
+        String email=sp.getString("email","afs@gmail.com");
+        String gender=sp.getString("gender","female");
+        displayname.setText ("Name:"+name);
+        displaymail.setText ("Email:"+email);
+        displaygender.setText ("Gender:"+gender);
+    }
+}
